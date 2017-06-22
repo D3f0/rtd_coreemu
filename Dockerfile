@@ -16,6 +16,7 @@ RUN echo "deb http://eriberto.pro.br/core/ stretch main\ndeb-src http://eriberto
         rm -rf /var/lib/apt/*
 
 RUN setcap 'CAP_NET_RAW+eip CAP_NET_ADMIN+eip' /usr/bin/dumpcap
-RUN cat /root/.ssh/id_rsa.pub >> /root/.ssh/authorized_keys
+#RUN cat /root/.ssh/id_rsa.pub >> /root/.ssh/authorized_keys
 
+RUN apt-get update && apt-get install -q -y wireshark netstat-nat && rm -rf /var/lib/apt/*
 ADD etc/supervisor/conf.d/core.conf /etc/supervisor/conf.d
