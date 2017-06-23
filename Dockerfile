@@ -16,7 +16,17 @@ RUN echo "deb http://eriberto.pro.br/core/ stretch main\ndeb-src http://eriberto
         rm -rf /var/lib/apt/*
 
 RUN setcap 'CAP_NET_RAW+eip CAP_NET_ADMIN+eip' /usr/bin/dumpcap
-#RUN cat /root/.ssh/id_rsa.pub >> /root/.ssh/authorized_keys
 
 RUN apt-get update && apt-get install -q -y wireshark netstat-nat && rm -rf /var/lib/apt/*
-ADD etc/supervisor/conf.d/core.conf /etc/supervisor/conf.d
+ADD noVNC /usr/local/noVNC
+ADD websockify /usr/local/noVNC/utils/websockify
+#ADD https://bootstrap.pypa.io/get-pip.py /tmp
+COPY get-pip.py /tmp/
+RUN python /tmp/get-pip.py && rm /tmp/get-pip.py
+
+RUN apt-get update && apt-get install -q -y nginx && rm -rf /var/lib/apt/*
+COPY etc/nginx/sites-enabled/default /etc/nginx/sites-enabled/
+
+EXPOSE 80
+
+ADD etc/supervisor/conf.d/*.conf /etc/supervisor/conf.d/
